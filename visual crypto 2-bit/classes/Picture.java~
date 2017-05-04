@@ -1,0 +1,234 @@
+import java.awt.*;
+import java.awt.font.*;
+import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.text.*;
+import java.util.*;
+
+/**
+ * A class that represents a picture.  This class inherits from 
+ * SimplePicture and allows the student to add functionality to
+ * the Picture class.  
+ * 
+ */
+public class Picture extends SimplePicture 
+{
+  
+  public Picture ()
+  {
+    super();  
+  }
+  
+  /**
+   * Constructor that takes a file name and creates the picture 
+   * @param fileName the name of the file to create the picture from
+   */
+  public Picture(String fileName)
+  {
+    super(fileName);
+  }
+  
+  /**
+   * Constructor that takes the width and height
+   * @param height the height of the desired picture
+   * @param width the width of the desired picture
+   */
+  public Picture(int height, int width)
+  {
+    // let the parent class handle this width and height
+    super(width,height);
+  }
+  
+  /**
+   * Constructor that takes a picture and creates a 
+   * copy of that picture
+   * @param copyPicture the picture to copy
+   */
+  public Picture(Picture copyPicture)
+  {
+    // let the parent class do the copy
+    super(copyPicture);
+  }
+  
+  /**
+   * Constructor that takes a buffered image
+   * @param image the buffered image to use
+   */
+  public Picture(BufferedImage image)
+  {
+    super(image);
+  }
+  
+  ////////////////////// methods ///////////////////////////////////////
+  
+  /**
+   * Method to return a string with information about this picture.
+   * @return a string with information about the picture such as fileName,
+   * height and width.
+   */
+  public String toString()
+  {
+    String output = "Picture, filename " + getFileName() + 
+      " height " + getHeight() 
+      + " width " + getWidth();
+    return output;
+    
+  }
+  
+  /** Method to turn picture into shades of gray */
+  public void grayscale() {
+    Pixel[][] pixels = this.getPixels2D();
+    for (Pixel[] rowArray : pixels) {
+      for (Pixel pixelObj : rowArray) {
+        int avg = (pixelObj.getRed()+pixelObj.getGreen()+pixelObj.getBlue())/3;
+        pixelObj.setRed(avg);
+        pixelObj.setGreen(avg);
+        pixelObj.setBlue(avg);
+      }
+    } 
+  }
+  
+//  public void visualCrypto1() {
+//    Pixel[][] pixels1 = this.getPixels2D();
+//
+//    for (Pixel[] rowArray : pixels1) {
+//      for (Pixel pixelObj : rowArray) {
+//        int avg = (pixelObj.getRed()+pixelObj.getGreen()+pixelObj.getBlue())/3;
+//        if (avg == 0) { // when pixel is black
+//          int n = (int)(Math.random()*(2-1+1)+1);
+//          if (n == 1) {
+//            pixelObj.setRed(50);
+//            pixelObj.setGreen(50);
+//            pixelObj.setBlue(50);
+//          }
+//          else if (n == 2) {
+//            pixelObj.setRed(200);
+//            pixelObj.setGreen(200);
+//            pixelObj.setBlue(200);
+//          }
+//        }
+//        else {
+//          int n = (int)(Math.random()*254);
+//          pixelObj.setRed((pixelObj.getRed()+n)%255);
+//          pixelObj.setGreen((pixelObj.getGreen()+n)%255);
+//          pixelObj.setBlue((pixelObj.getBlue()+n)%255);
+//        }
+//        
+//      }
+//    }
+////    System.out.println(list);
+//  }
+//  
+//  public void visualCrypto2() {
+//    Pixel[][] pixels2 = this.getPixels2D();
+//
+//    for (Pixel[] rowArray : pixels2) {
+//      for (Pixel pixelObj : rowArray) {
+//        int avg = (pixelObj.getRed()+pixelObj.getGreen()+pixelObj.getBlue())/3;
+//        int n = (int)(Math.random()*avg);
+//        pixelObj.setRed((pixelObj.getRed()-n)%255);
+//        pixelObj.setGreen((pixelObj.getGreen()-n)%255);
+//        pixelObj.setBlue((pixelObj.getBlue()-n)%255);
+//        
+//        if (avg == 0) {
+//          n = (int)(Math.random()*(150-100+1)+100);
+//          pixelObj.setRed(n);
+//          pixelObj.setGreen(n);
+//          pixelObj.setBlue(n);
+//        }
+//      }
+//    }
+//    
+//  }
+  
+  // Generate random noise for first image
+  public void randomNoise() {
+    Pixel[][] pixels1 = this.getPixels2D();
+    for (int i = 0; i < pixels1.length; i++) {
+      for (int j = 0; j < pixels1[0].length; j++) {
+        int rand = (int)(Math.random()*2+1);
+        Pixel pixelObj = pixels1[i][j];
+        if (rand == 1) {
+          pixelObj.setRed(0);
+          pixelObj.setGreen(0);
+          pixelObj.setBlue(0);
+        } else {
+          pixelObj.setRed(255);
+          pixelObj.setGreen(255);
+          pixelObj.setBlue(255);
+        }
+      }
+    }
+  }
+    
+    /*  create a second image the same size and shape as the first, 
+     * but where a pixel of the original image is the same as the corresponding pixel 
+     in the first encrypted image, set the same pixel of the second encrypted image 
+     to the opposite color. Where a pixel of the original image is different than the 
+     corresponding pixel in the first encrypted image, set the same pixel of the second 
+     encrypted image to the same color as the corresponding pixel of the first encrypted image. */
+    public void visualCrypto(Picture p1, Picture p2) {
+      Pixel[][] pixels = this.getPixels2D(); // original
+      
+      p1.randomNoise();
+      Pixel[][] pixels1 = p1.getPixels2D(); // noise
+      
+      Pixel[][] pixels2 = p2.getPixels2D(); // the one being changed
+      
+      for (int i = 0; i < pixels.length; i++) {
+        for (int j = 0; j < pixels[0].length; j++) {
+          int sum = pixels[i][j].getRed() + pixels[i][j].getGreen() + pixels[i][j].getBlue();
+          int sum1 = pixels1[i][j].getRed() + pixels1[i][j].getGreen() + pixels1[i][j].getBlue();
+          
+          if (sum == sum1) {
+              pixels2[i][j].setRed(0);
+              pixels2[i][j].setGreen(0);
+              pixels2[i][j].setBlue(0);
+          }
+          else {
+              pixels2[i][j].setRed(255);
+              pixels2[i][j].setGreen(255);
+              pixels2[i][j].setBlue(255);
+          }
+//          if (i==0) 
+//            System.out.println(i+" " +j+" "+sum+" " +sum1+" "+pixels2[i][j].getRed());
+        }
+      }
+      
+      p1.explore();
+      p2.explore();
+    }
+    
+    public void overlay(Picture p1, Picture p2) {
+      Pixel[][] pixels = this.getPixels2D();
+      Pixel[][] pixels1 = p1.getPixels2D();
+      Pixel[][] pixels2 = p2.getPixels2D();
+      
+      int rows = pixels.length;
+      int cols = pixels[0].length;
+      
+//      System.out.println(pixels1[0][0].getRed() + pixels1[0][0].getGreen() + pixels1[0][0].getBlue());
+//      System.out.println(pixels[0][0].getRed() + pixels[0][0].getGreen() + pixels[0][0].getBlue());
+        
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          int sum1 = pixels1[i][j].getRed() + pixels1[i][j].getGreen() + pixels1[i][j].getBlue();
+          int sum2 = pixels2[i][j].getRed() + pixels2[i][j].getGreen() + pixels2[i][j].getBlue();
+//          System.out.println(sum1 + " " + sum2);
+          
+          int n = 0;
+          if (sum1 == sum2) {
+            n = 0;
+          } else {
+            n = 255;
+          }
+          
+          pixels[i][j].setRed(n);
+          pixels[i][j].setGreen(n);
+          pixels[i][j].setBlue(n);
+        }
+      }
+    }
+    
+    
+  } 
