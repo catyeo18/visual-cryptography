@@ -3,4 +3,4 @@ This project illustrates the concept of visual cryptography (as designed by Moni
 
 Read more about this project [here](https://docs.google.com/document/d/14bMWoPZ7dyAmtYh2j784_z66oFRVDrZUwd0fweVP9Zg/edit?usp=sharing).
 
-![](visualcrypto-screenshot.png)
+![](visual3bitcrypto-screenshot.png)
